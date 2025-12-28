@@ -21,6 +21,7 @@ const LanguageData const languageData[LANGUAGE_COUNT] = {
     [LANGUAGE_RU_RU] = {.strings = lang_ru_RU},
     [LANGUAGE_PL_PL] = {.strings = lang_pl_PL},
     [LANGUAGE_SV_SE] = {.strings = lang_sv_SE},
+    [LANGUAGE_KO_KR] = {.strings = lang_ko_KR},
 };
 
 // 当前语言设置 (Current language setting)
@@ -71,6 +72,8 @@ const char *getLangDesc(Language lang) {
             return "Polski";
         case LANGUAGE_SV_SE:   
             return "Svenska";
+        case LANGUAGE_KO_KR:
+            return "한국어";
         default:
             return "@@LANG@@";
     }
