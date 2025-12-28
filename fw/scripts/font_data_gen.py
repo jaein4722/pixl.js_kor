@@ -85,7 +85,7 @@ def main():
     extract_non_printable_chars()
 
     combined_content = ""
-    for file_name in ["chinese3.txt", "pixjs.txt"]:
+    for file_name in ["chinese3.txt", "pixjs.txt", "korean.txt"]:
         with open(os.path.join(data_dir, file_name), "r", encoding="utf-8") as file:
             combined_content += file.read()
 
