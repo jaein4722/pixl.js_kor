@@ -6,129 +6,6 @@ import json
 import os
 import csv
 
-# --- 번역 데이터 ---
-amiibo_translation = {
-    # Animal Crossing
-    "Isabelle": "여울", "Tom Nook": "너굴", "K.K.": "T.K.", "Mabel": "고순이", "Reese": "리사",
-    "Cyrus": "리포", "Lottie": "솜이", "Celeste": "부옥", "Blathers": "부엉", "Kicks": "패트릭",
-    "Rover": "낯선고양이", "Timmy & Tommy": "콩돌이 & 밤돌이", "Kapp'n": "갑돌", "Resetti": "도루묵씨",
-    "Digby": "켄트", "Flick": "레온", "C.J.": "저스틴",
-    "Daisy Mae": "무파니", "Orville": "로드리", "Wilbur": "윌버", "Harvey": "파니엘", "Wardell": "너티",
-    "Niko": "니코", "Wisp": "깨빈", "Saharah": "사하라", "Label": "라벨", "Sable": "고옥이",
-    "Goldie": "카라멜", "Stitches": "패치", "Rosie": "부케", "Marshal": "쭈니", "Fauna": "솔미",
-    "Bob": "히죽", "Merengue": "스트로베리", "Julian": "줄리안", "Ankha": "클레오", "Zucker": "먹고파",
-    "Lucky": "럭키", "Tangy": "백프로", "Punchy": "빙티", "Lolly": "사이다", "Poppy": "다람",
-    "Beau": "피터", "Coco": "이요", "Ruby": "루나", "Whitney": "비앙카", "Chief": "대장",
-    "Maple": "메이첼", "Diana": "나탈리", "Skye": "신옥", "Static": "스파크", "Fang": "시베리아",
-    "Bluebear": "글루민", "Pekoe": "재스민", "Chrissy": "크리스틴", "Francine": "프랑소와",
-    "Merry": "유네찌", "Lily": "레이니", "Marina": "문리나", "Octavian": "문복", "Muffy": "프릴",
-    "Pietro": "피에로", "Genji": "토시", "Kabuki": "가북희", "Kid Cat": "1호", "Agent S": "2호",
-    "Big Top": "3호", "Rocket": "4호", "Hamlet": "햄스틴", "Apple": "애플", "Flurry": "뽀야미",
-    "Judy": "미애", "Raymond": "잭슨", "Sherb": "뽀얌", "Dom": "차둘", "Audie": "모니카",
-    "Cyd": "펑크스", "Megan": "캔디", "Reneigh": "리아나", "Shino": "기루", "Ione": "스피카",
-    "Sasha": "미첼", "Tiansheng": "샹펜", "Quinn": "풍성", "Marlo": "돈부리", "Petri": "리카",
-    "Cephalobot": "기계로", "Azalea": "鹃", "Rio": "리오", "Ace": "에이스", "Frett": "샹펜",
-    "Zoe": "조이", "Chabwick": "펭구",
-    "Isabelle - Winter": "여울 (겨울옷)", "Isabelle - Summer Outfit": "여울 (여름옷)",
-    "Isabelle - Kimono": "여울 (기모노)", "Isabelle - Dress": "여울 (드레스)",
-    "Isabelle - Sweater": "여울 (스웨터)", "Isabelle - Character Parfait": "여울 (캐릭터 파르페)",
-    "Tom Nook - Jacket": "너굴 (자켓)", "Tom Nook - Coat": "너굴 (코트)",
-    "K. K. Slider - Pikopuri": "T.K. (피코프리)", "DJ KK": "DJ K.K.",
-    "Goldie - Amiibo Festival": "카라멜 (아미보 페스티벌)",
-    "Stitches - Amiibo Festival": "패치 (아미보 페스티벌)",
-    "Rosie - Amiibo Festival": "부케 (아미보 페스티벌)",
-    "Lottie - Black Skirt And Bow": "솜이 (검은 치마와 리본)", "Lottie - Island": "솜이 (섬)",
-    "Digby - Raincoat": "켄트 (우비)",
-    "Resetti - Without Hat": "도루묵씨 (모자 없음)", "Don Resetti": "오루묵씨",
-    "Don Resetti - Without Hat": "오루묵씨 (모자 없음)",
-    "Timmy - Uniform": "콩돌이 (유니폼)", "Tommy - Uniform": "밤돌이 (유니폼)",
-    "Timmy - Full Apron": "콩돌이 (앞치마)", "Tommy - Suit": "밤돌이 (정장)",
-    "Redd - Shirt": "여욱 (셔츠)",
-
-    # The Legend of Zelda
-    "Link": "링크", "Zelda": "젤다", "Ganondorf": "가논돌프", "Sheik": "시크", "Toon Link": "툰링크",
-    "Wolf Link": "울프 링크", "Guardian": "가디언", "Bokoblin": "보코블린", "Daruk": "다르케르",
-    "Mipha": "미파", "Revali": "리발", "Urbosa": "우르보사", "Midna & Wolf Link": "미드나 & 울프 링크",
-    "Link - Archer": "링크 (활)", "Link - Rider": "링크 (라이더)", "Zelda (BotW)": "젤다 (브레스 오브 더 와일드)",
-    "8-Bit Link": "8비트 링크", "Link - Ocarina of Time": "링크 (시간의 오카리나)",
-    "Toon Link - The Wind Waker": "툰링크 (바람의 지휘봉)", "Toon Zelda - The Wind Waker": "툰젤다 (바람의 지휘봉)",
-    "Link - Majora's Mask": "링크 (무쥬라의 가면)", "Link - Skyward Sword": "링크 (스카이워드 소드)",
-    "Link - Twilight Princess": "링크 (황혼의 공주)", "Zelda & Loftwing": "젤다 & 로프트버드",
-    "Link - Link's Awakening": "링크 (꿈꾸는 섬)",
-    "Link - Tears of the Kingdom": "링크 (티어스 오브 더 킹덤)",
-    "Zelda - Tears of the Kingdom": "젤다 (티어스 오브 더 킹덤)",
-    "Ganondorf - Tears of the Kingdom": "가논돌프 (티어스 오브 더 킹덤)",
-
-    # Super Mario & Others
-    "Mario": "마리오", "Luigi": "루이지", "Peach": "피치공주", "Bowser": "쿠파", "Dr. Mario": "닥터 마리오",
-    "Rosalina": "로젤리나", "Bowser Jr.": "쿠파주니어", "Wario": "와리오", "Yoshi": "요시", "Donkey Kong": "동키콩",
-    "Diddy Kong": "디디콩", "Goomba": "굼바", "Koopa Troopa": "엉금엉금", "Boo": "부끄부끄",
-    "Daisy": "데이지", "Waluigi": "와루이지", "Piranha Plant": "뻐끔플라워",
-    "Mario - Gold Edition": "골드 마리오", "Mario - Silver Edition": "실버 마리오",
-    "8-Bit Mario Modern Color": "8비트 마리오 (모던 컬러)", "8-Bit Mario Classic Color": "8비트 마리오 (클래식 컬러)",
-    "Wedding Mario": "웨딩 마리오", "Wedding Peach": "웨딩 피치", "Wedding Bowser": "웨딩 쿠파",
-    "Cat Mario": "고양이마리오", "Cat Peach": "고양이피치",
-    "Green Yarn Yoshi": "초록 털실 요시", "Light Blue Yarn Yoshi": "하늘색 털실 요시", "Pink Yarn Yoshi": "핑크 털실 요시",
-    "Mega Yarn Yoshi": "거대 털실 요시", "Poochy": "포치",
-    "Hammer Slam Bowser": "해머 슬램 쿠파", "Turbo Charge Donkey Kong": "터보 차지 동키콩",
-
-    # Splatoon
-    "Inkling Girl": "잉클링 걸", "Inkling Boy": "잉클링 보이", "Inkling Squid": "잉클링 스퀴드",
-    "Callie": "아오리", "Marie": "호타루", "Pearl": "히메", "Marina": "이이다",
-    "Octoling Girl": "옥토링 걸", "Octoling Boy": "옥토링 보이", "Octoling Octopus": "옥토링 옥토퍼스",
-    "Smallfry": "꼬마연어", "Shiver": "후우카", "Frye": "우츠호", "Big Man": "만타로",
-
-    # Kirby
-    "Kirby": "커비", "King Dedede": "디디디 대왕", "Meta Knight": "메타 나이트", "Waddle Dee": "웨이들 디",
-
-    # Pokemon
-    "Pikachu": "피카츄", "Charizard": "리자몽", "Lucario": "루카리오", "Jigglypuff": "푸린",
-    "Greninja": "개굴닌자", "Mewtwo": "뮤츠", "Pokemon Trainer": "포켓몬 트레이너", "Squirtle": "꼬부기",
-    "Ivysaur": "이상해풀", "Pichu": "피츄", "Incineroar": "어흥염", "Detective Pikachu": "명탐정 피카츄",
-    "Shadow Mewtwo": "다크 뮤츠",
-
-    # Fire Emblem
-    "Marth": "마르스", "Ike": "아이크", "Robin": "러플레", "Lucina": "루키나", "Roy": "로이",
-    "Corrin": "카무이", "Corrin - Player 2": "카무이 (2P)", "Chrom": "크롬", "Tiki": "치키",
-    "Alm": "아름", "Celica": "세리카", "Byleth": "벨레트",
-
-    # 기타
-    "Samus": "사무스", "Zero Suit Samus": "제로 슈트 사무스", "Metroid": "메트로이드", "Samus Aran": "사무스 아란",
-    "E.M.M.I.": "E.M.M.I.", "Samus (Metroid Dread)": "사무스 (메트로이드 드레드)", "Dark Samus": "다크 사무스",
-    "Ridley": "리들리", "Pit": "피트", "Palutena": "파르테나", "Dark Pit": "블랙피트", "Fox": "폭스",
-    "Falco": "팔코", "Wolf": "울프", "Ness": "네스", "Lucas": "류카", "Captain Falcon": "캡틴 팔콘",
-    "Olimar": "올리마", "Pikmin": "피크민", "Wii Fit Trainer": "Wii Fit 트레이너", "Shulk": "슈르크",
-    "Mr. Game & Watch": "Mr. 게임&워치", "Duck Hunt": "덕헌트", "R.O.B.": "R.O.B.",
-    "R.O.B. - Famicom": "R.O.B. (패미컴)", "R.O.B. - NES": "R.O.B. (NES)",
-    "Pac-Man": "팩맨", "Mega Man": "록맨", "Sonic": "소닉", "Ryu": "류", "Ken": "켄",
-    "Cloud": "클라우드", "Cloud - Player 2": "클라우드 (2P)", "Bayonetta": "베요네타", "Bayonetta - Player 2": "베요네타 (2P)",
-    "Snake": "스네이크", "Simon": "시몬", "Richter": "릭터", "King K. Rool": "킹크루루", "Ice Climbers": "아이스 클라이머",
-    "Joker": "조커", "Hero": "용사", "Banjo & Kazooie": "반조 & 카주이", "Terry": "테리", "Min Min": "미엔미엔",
-    "Steve": "스티브", "Alex": "알렉스", "Sephiroth": "세피로스", "Pyra": "호무라", "Mythra": "히카리",
-    "Kazuya": "카즈야", "Sora": "소라", "Shovel Knight": "삽질 기사", "Plague Knight": "역병 기사",
-    "Specter Knight": "스펙터 기사", "King Knight": "킹 기사", "Gold Shovel Knight": "골드 삽질 기사",
-    "Solaire of Astora": "태양의 전사 솔라", "Loot Goblin": "보물 고블린", "Qbby": "큐비",
-    "Magnamalo": "마가이마가도", "Palamute": "동반자 가루크", "Palico": "동반자 아이루", "Tsukino": "츠키노",
-    "Ena": "에나", "Razewing Ratha": "파멸의 날개 레우스"
-}
-
-gameseries_translation = {
-    "Animal Crossing": "동물의 숲", "The Legend of Zelda": "젤다의 전설", "Super Mario": "슈퍼 마리오",
-    "Super Smash Bros.": "슈퍼 스매시브라더스", "Yoshi's Woolly World": "요시 울리 월드",
-    "Splatoon": "스플래툰", "Kirby": "별의 커비", "Fire Emblem": "파이어 엠블렘", "Star Fox": "스타폭스",
-    "Pokemon": "포켓몬", "Metroid": "메트로이드", "Kid Icarus": "키드 이카루스", "Pikmin": "피크민",
-    "Wii Fit": "Wii Fit", "Xenoblade Chronicles": "제노블레이드 크로니클스", "Pac-Man": "팩맨",
-    "Mega Man": "록맨", "Sonic the Hedgehog": "소닉 더 헤지혹", "Street Fighter": "스트리트 파이터",
-    "Final Fantasy": "파이널 판타지", "Bayonetta": "베요네타", "Chibi-Robo!": "작은 로보!",
-    "Shovel Knight": "삽질 기사", "Dark Souls": "다크 소울", "Diablo": "디아블로",
-    "Skylanders": "스카이랜더스", "Monster Hunter": "몬스터 헌터", "BoxBoy!": "BOXBOY!",
-    "Castlevania": "캐슬바니아", "Metal Gear Solid": "메탈 기어 솔리드", "Dragon Quest": "드래곤 퀘스트",
-    "Banjo-Kazooie": "반조-카주이", "Fatal Fury": "아랑전설", "ARMS": "ARMS",
-    "Minecraft": "마인크래프트", "Kingdom Hearts": "킹덤 하츠",
-    "Monster Hunter Rise": "몬스터 헌터 라이즈", "Monster Hunter Stories": "몬스터 헌터 스토리즈",
-    "Power Pros": "파워풀 프로야구", "Yu-Gi-Oh!": "유희왕"
-}
-
 class Amiibo:
     def __init__(self):
         self.id = None
@@ -178,19 +55,10 @@ def read_amiibo_from_csv():
     amiibos = list()
     with open(csv_file, "r", encoding="utf8") as f:
         for r in csv.reader(f):
-            if len(r) < 3:
-                continue
             amiibo = Amiibo()
             amiibo.id = r[0]
-            # 1번 방식: CSV의 4번째 컬럼(한글)이 있으면 name_en에 덮어쓴다.
-            # 없다면 name_en 그대로 사용 (나중에 번역 데이터로 보완)
-            if len(r) > 3 and r[3].strip():
-                amiibo.name_en = r[3]
-            else:
-                amiibo.name_en = r[1]
-            
+            amiibo.name_en = r[1]
             amiibo.name_cn = r[2]
-            # game_series는 CSV에 없으므로 나중에 API 데이터와 병합 시 처리됨
             amiibos.append(amiibo)
     
     return amiibos
@@ -205,7 +73,6 @@ def write_amiibo_to_csv(amiibos):
             r.append(amiibo.id)
             r.append(amiibo.name_en)
             r.append(amiibo.name_cn)
-            # 1번 방식이므로 name_kr 별도 저장 안함
             w.writerow(r)
 
 
@@ -216,25 +83,8 @@ def merge_amiibo(amiibos_csv, amiibos_api):
 
     for amiibo in amiibos_api:
         if amiibos_merged.get(amiibo.id) == None:
-            # API에서 가져온 새 데이터에 대해 번역 시도
-            if amiibo.name_en in amiibo_translation:
-                amiibo.name_en = amiibo_translation[amiibo.name_en]
-            
             amiibos_merged[amiibo.id] = amiibo
             print("Found new amiibo: [%s] %s (%s)" % (amiibo.id, amiibo.name_en, amiibo.game_series))
-        else:
-            # 기존 데이터가 있어도 API 정보로 game_series 보완 등 가능하지만
-            # 이미 CSV에서 한글로 덮어쓰여졌을 수 있으므로 name_en은 건드리지 않거나,
-            # CSV에 한글이 없는 경우(영어 그대로인 경우) 번역 시도할 수 있음.
-            existing = amiibos_merged[amiibo.id]
-            # 만약 기존 이름이 영어 원문 그대로라면 번역 시도
-            # (단, 사용자가 수동으로 영어를 유지하고 싶을 수도 있으므로 주의. 여기서는 강제 적용)
-            # 실제로는 CSV 읽을 때 이미 처리했거나, 여기서 처리하거나 선택.
-            if existing.name_en in amiibo_translation:
-                 existing.name_en = amiibo_translation[existing.name_en]
-            elif amiibo.name_en in amiibo_translation: # API 이름으로 매칭 시도
-                 existing.name_en = amiibo_translation[amiibo.name_en]
-
     amiibos = list()
     for k in amiibos_merged:
         amiibos.append(amiibos_merged[k])
@@ -247,7 +97,6 @@ def gen_amiibo_data_c_file(amiibos):
         f.write('#include "db_header.h"\n')
         f.write('const db_amiibo_t amiibo_list[] = {\n')
         for amiibo in amiibos:
-            # name_en 자리에 (이미 한글로 덮어쓰여진) 이름을 넣음
             f.write('{0x%s, 0x%s, "%s", "%s"}, \n' % 
                     (amiibo.id[0:8], amiibo.id[8:16], amiibo.name_en, 
              amiibo.name_cn)) 
@@ -262,28 +111,12 @@ def read_games_from_csv():
     games = list()
     with open(csv_file, "r", encoding="utf8") as f:
         for r in csv.reader(f):
-            if len(r) < 4:
-                continue
             game = Game()
             game.id = r[0]
             game.parent_id = r[1]
-            
-            # 1번 방식: CSV 5번째 컬럼(한글)이 있으면 name_en 덮어쓰기
-            if len(r) > 4 and r[4].strip():
-                game.name_en = r[4]
-            else:
-                game.name_en = r[2]
-                # 번역 데이터로 보완 시도
-                if game.name_en in gameseries_translation:
-                    game.name_en = gameseries_translation[game.name_en]
-
+            game.name_en = r[2]
             game.name_cn = r[3] 
-            game.order = r[4] # r[5]가 아니라 원래 r[4]가 order였음. CSV 컬럼 밀림 주의.
-            # 하지만 위에서 한글 컬럼(r[4])을 추가했으므로 order는 r[5]로 밀렸을 수 있음.
-            # 사용자가 CSV를 수동 수정했다면 r[5]가 order일 것임.
-            if len(r) > 5:
-                 game.order = r[5]
-            
+            game.order = r[4]
             games.append(game)
     return games
 
@@ -295,24 +128,12 @@ def read_link_from_csv():
     links = list()
     with open(csv_file, "r", encoding="utf8") as f:
         for r in csv.reader(f):
-                if len(r) < 4:
-                    continue
                 link = Link()
                 link.game_id = r[0]
                 link.amiibo_id = r[1]
-                
-                # 1번 방식: CSV 5번째 컬럼(한글)이 있으면 note_en 덮어쓰기
-                if len(r) > 4 and r[4].strip():
-                    link.note_en = r[4]
-                else:
-                    link.note_en = r[2]
-                
+                link.note_en = r[2]
                 link.note_cn = r[3]
-                if len(r) > 5:
-                    link.note_it = r[5] # 6번째 컬럼이 이탈리아어
-                else:
-                    link.note_it = r[4] if len(r)>4 else "" # 기존 호환성
-                
+                link.note_it = r[4]
                 links.append(link)
     return links
 
@@ -337,7 +158,6 @@ def gen_amiibo_link_c_file(links):
         f.write('#include "db_header.h"\n')
         f.write('const db_link_t link_list[] = {\n')
         for link in links:
-            # note_kr 제거하고 note_en에 한글이 들어감
             f.write('{%s, 0x%s, 0x%s, "%s", "%s", "%s"}, \n' % 
                     (link.game_id, link.amiibo_id[0:8], link.amiibo_id[8:16], link.note_en, 
              link.note_cn, link.note_it))  
@@ -351,7 +171,6 @@ def gen_amiibo_game_c_file(games, links):
         f.write('#include "db_header.h"\n')
         f.write('const db_game_t game_list[] = {\n')
         for game in games:
-            # name_kr 제거하고 name_en에 한글이 들어감
             f.write('{%s, %s, "%s", "%s", %s, %s}, \n' % 
                     (game.id, game.parent_id, game.name_en, 
              game.name_cn, game.order, count_game_links( games, links, game.id)))
@@ -391,3 +210,4 @@ links = read_link_from_csv()
 links = gen_other_link(amiibos_merged, links)
 gen_amiibo_game_c_file(games, links)
 gen_amiibo_link_c_file(links)
+
